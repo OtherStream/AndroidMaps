@@ -1,17 +1,30 @@
-package com.example.regresoacasa.network
+package com.example.maps.network
 
+import com.example.maps.models.RouteResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.osmdroid.util.GeoPoint
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
+import retrofit2.http.Header
+import retrofit2.http.POST
+
+// Interfaz Retrofit para OpenRouteService
+interface OrsApiService {
+    @POST("v2/directions/driving-car/geojson")
+    suspend fun getRoute(
+        @Header("Authorization") apiKey: String,
+        @Body body: Map<String, Any>
+    ): RouteResponse
+}
 
 object RouteManager {
 
-    // ← Tu API key gratis de openrouteservice.org
-    private const val API_KEY = "TU_API_KEY_AQUI"
+    private const val ORS_API_KEY = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImUxZThiMDU4MzE0OTQ0ODY4ODc5ODNhM2FhNmY2Mjg4IiwiaCI6Im11cm11cjY0In0="
+    private const val BASE_URL = "https://api.openrouteservice.org/"
 
-    private val api: RouteApiService by lazy {
+    private val api: OrsApiService by lazy {
         val logging = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
@@ -20,17 +33,21 @@ object RouteManager {
             .build()
 
         Retrofit.Builder()
-            .baseUrl("https://api.openrouteservice.org/")
+            .baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(RouteApiService::class.java)
+            .create(OrsApiService::class.java)
     }
 
+    /**
+     * Obtiene la ruta entre dos puntos.
+     * @return lista de pares (lat, lon) o null si falla
+     */
     suspend fun getRoute(
         originLat: Double, originLon: Double,
         destLat: Double, destLon: Double
-    ): List<GeoPoint>? {
+    ): List<GeoPoint>? {                          // ← solo cambia esta línea
         return try {
             val body = mapOf(
                 "coordinates" to listOf(
@@ -38,9 +55,9 @@ object RouteManager {
                     listOf(destLon, destLat)
                 )
             )
-            val response = api.getRoute(API_KEY, body)
+            val response = api.getRoute(ORS_API_KEY, body)
             response.routes.firstOrNull()?.geometry?.coordinates?.map { coord ->
-                GeoPoint(coord[1], coord[0]) // ORS devuelve [lon, lat]
+                GeoPoint(coord[1], coord[0])
             }
         } catch (e: Exception) {
             e.printStackTrace()

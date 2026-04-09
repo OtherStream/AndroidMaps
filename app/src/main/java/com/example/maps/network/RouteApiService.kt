@@ -1,6 +1,6 @@
-package com.example.regresoacasa.network
+package com.example.maps.network
 
-import com.example.regresoacasa.models.RouteResponse
+import com.example.maps.models.RouteResponse
 import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.POST

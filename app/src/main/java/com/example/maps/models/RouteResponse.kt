@@ -1,4 +1,4 @@
-package com.example.regresoacasa.models
+package com.example.maps.models
 
 data class RouteResponse(
     val routes: List<Route>
@@ -10,10 +10,10 @@ data class Route(
 )
 
 data class Geometry(
-    val coordinates: List<List<Double>>
+    val coordinates: List<List<Double>> // [lon, lat]
 )
 
 data class Summary(
-    val distance: Double,
-    val duration: Double
+    val distance: Double, // metros
+    val duration: Double  // segundos
 )
