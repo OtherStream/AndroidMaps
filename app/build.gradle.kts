@@ -70,6 +70,12 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 
+    // osmdroid eventos de mapa (MapEventsOverlay)
+    implementation("org.osmdroid:osmdroid-android:6.1.20")
+
+    // Acompañist para permisos en Compose
+    implementation("com.google.accompanist:accompanist-permissions:0.36.0")
+
     implementation("com.google.accompanist:accompanist-permissions:0.36.0")
     implementation("androidx.navigation:navigation-compose:2.8.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.4")
