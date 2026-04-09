@@ -164,7 +164,6 @@ fun MapScreen(onNavigateToSettings: () -> Unit) {
                         locationPermissions.launchMultiplePermissionRequest()
                         return@ExtendedFloatingActionButton
                     }
-
                     scope.launch {
                         isLoading = true
                         val myLocation = LocationHelper.getCurrentLocation(context)
@@ -179,9 +178,7 @@ fun MapScreen(onNavigateToSettings: () -> Unit) {
                             myLocation.latitude, myLocation.longitude,
                             homeLocation.latitude, homeLocation.longitude
                         )
-
                         isLoading = false
-
                         if (route == null || route.isEmpty()) {
                             Toast.makeText(context, "No se pudo calcular la ruta", Toast.LENGTH_SHORT).show()
                             return@launch
@@ -189,14 +186,12 @@ fun MapScreen(onNavigateToSettings: () -> Unit) {
 
                         mapView?.let { map ->
                             map.overlays.removeAll { it is Polyline || it is Marker }
-
                             val polyline = Polyline().apply {
                                 setPoints(route)
                                 outlinePaint.color = Color.parseColor("#1976D2")
                                 outlinePaint.strokeWidth = 10f
                             }
                             map.overlays.add(polyline)
-
                             val marker = Marker(map).apply {
                                 position = homeLocation
                                 title = homeName.ifEmpty { "Mi casa" }
