@@ -1,4 +1,4 @@
-package com.example.maps
+package com.example.maps.location
 
 import android.annotation.SuppressLint
 import android.content.Context
